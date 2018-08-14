@@ -3,8 +3,8 @@ import numpy as np
 import math
 
 # weights initializers
-#he_normal = tf.contrib.keras.initializers.he_normal()
-he_normal = tf.contrib.layers.variance_scaling_initializer()
+he_normal = tf.contrib.keras.initializers.he_normal()
+#he_normal = tf.contrib.layers.variance_scaling_initializer()
 regularizer = tf.contrib.layers.l2_regularizer(1e-4)
 
 def Convolutional_Block(inputs, shortcut, num_filters, name, is_training):
@@ -71,6 +71,8 @@ class VDCNN():
         # Depth to No. Layers
         if depth == 9:
             num_layers = [2,2,2,2]
+        elif depth == 5:
+            num_layers = [1,1,1,1]
         elif depth == 17:
             num_layers = [4,4,4,4]
         elif depth == 29:
@@ -134,6 +136,8 @@ class VDCNN():
             cnn_inputs = tf.pad(cnn_inputs, paddings, "CONSTANT")
             #print("cnn_inputs shape:", cnn_inputs.shape)
             inputs = tf.nn.conv2d(cnn_inputs, W, strides=[1, 1, 1, 1], padding="VALID", name="first_conv")
+            inputs = tf.layers.batch_normalization(inputs, axis=-1, training=self.is_training)
+            inputs = tf.nn.relu(inputs, name="first_relu")
             #print("temp cnn output shape:", inputs.shape)
             inputs = tf.squeeze(inputs, axis=2)
             #print("squeeze shape", inputs.shape)
@@ -209,7 +213,7 @@ class VDCNN():
 
         # fc3
         with tf.variable_scope('fc3'):
-            w = tf.get_variable('w', [self.fc2.get_shape()[1], num_classes], initializer=he_normal,
+            w = tf.get_variable('w', [self.fc2.get_shape()[1], num_classes], initializer=initializer,
                 regularizer=regularizer)
             b = tf.get_variable('b', [num_classes], initializer=tf.constant_initializer(1.0))
             self.fc3 = tf.matmul(self.fc2, w) + b

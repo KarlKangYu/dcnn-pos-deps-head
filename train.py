@@ -26,9 +26,9 @@ tf.flags.DEFINE_boolean("optional_shortcut", True, "Use optional shortcut (defau
 #tf.flags.DEFINE_integer("min_frequency", 10, "Min word frequency to be contained in vocab list")
 
 # Training Parameters
-tf.flags.DEFINE_float("learning_rate", 0.01, "Starter Learning Rate (default: 1e-2)")
-tf.flags.DEFINE_integer("batch_size", 256, "Batch Size (default: 128)")
-tf.flags.DEFINE_integer("num_epochs", 500, "Number of training epochs (default: 50)")
+tf.flags.DEFINE_float("learning_rate", 0.001, "Starter Learning Rate (default: 1e-2)")
+tf.flags.DEFINE_integer("batch_size", 128, "Batch Size (default: 128)")
+tf.flags.DEFINE_integer("num_epochs", 200, "Number of training epochs (default: 50)")
 tf.flags.DEFINE_integer("evaluate_every", 10000, "Evaluate model on dev set after this many steps (default: 50)")
 tf.flags.DEFINE_integer("checkpoint_every", 10000, "Save model after this many steps")
 tf.flags.DEFINE_boolean("enable_tensorboard", True, "Enable Tensorboard (default: True)")
